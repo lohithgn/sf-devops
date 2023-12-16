@@ -36,7 +36,7 @@ jobs:
           run: msbuild src/app-1/Application1/Application1.sln /p:Configuration=Release /t:Rebuild
 
         - name: Build with MSBuild
-          run: msbuild src/app-1/Application1/Application1.sfproj /t:Package /p:PackageLocation=foo
+          run: msbuild src/app-1/Application1/Application1.sfproj /t:Package /p:PackageLocation=${{ github.workspace }}/pkg
         
         # - name: Connect to cluster
         #   run: |
