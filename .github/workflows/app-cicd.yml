@@ -1,0 +1,52 @@
+name: Build and Deploy to Service Fabric
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build-and-deploy:
+        runs-on: windows-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Setup Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.x'
+
+        - name: Setup NuGet
+          uses: NuGet/setup-nuget@v1.2.0
+        
+        - name: Install sfctl
+          run: pip install sfctl      
+        
+        - name: Setup MSBuild
+          uses: microsoft/setup-msbuild@v1.3.1
+
+        - name: Restore dependencies
+          run: nuget restore **\*.sln  
+        
+        - name: Build with MSBuild
+          run: msbuild src/app-1/Application1/Application1.sln /p:Configuration=Release /t:Rebuild
+
+        - name: Build with MSBuild
+          run: msbuild src/app-1/Application1/Application1.sfproj /t:Package /p:PackageLocation=foo
+  
+        
+        
+        
+        # - name: Connect to cluster
+        #   run: |
+        #     sfctl cluster select --endpoint ${{ secrets.SF_CLUSTER_ENDPOINT }} --pem ${{ secrets.SF_CLUSTER_CERT_PATH }} --no-verify
+
+        # - name: Build and deploy application
+        #   run: |
+        #     # Replace with your build and deployment commands
+        #     dotnet build MyServiceFabricApp.sln
+        #     sfctl application upload --path MyServiceFabricApp --show-progress
+        #     sfctl application provision --application-type-build-path MyServiceFabricApp
+        #     sfctl application create --app-name fabric:/MyServiceFabricApp --app-type MyServiceFabricAppType --app-version 1.0.0
