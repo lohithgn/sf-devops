@@ -29,16 +29,14 @@ jobs:
           uses: microsoft/setup-msbuild@v1.3.1
 
         - name: Restore dependencies
-          run: nuget restore **\*.sln  
+          run: nuget restore
+          working-directory: src/app-1/Application1
         
         - name: Build with MSBuild
           run: msbuild src/app-1/Application1/Application1.sln /p:Configuration=Release /t:Rebuild
 
         - name: Build with MSBuild
           run: msbuild src/app-1/Application1/Application1.sfproj /t:Package /p:PackageLocation=foo
-  
-        
-        
         
         # - name: Connect to cluster
         #   run: |
