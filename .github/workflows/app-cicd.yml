@@ -32,10 +32,10 @@ jobs:
           run: nuget restore
           working-directory: src/app-1/Application1
         
-        - name: Build with MSBuild
+        - name: Build Solution
           run: msbuild src/app-1/Application1/Application1.sln /p:Configuration=Release /t:Rebuild
 
-        - name: Build with MSBuild
+        - name: Build SF Project
           run: msbuild src/app-1/Application1/Application1.sfproj /t:Package /p:PackageLocation=${{ github.workspace }}/pkg
         
         # - name: Connect to cluster
